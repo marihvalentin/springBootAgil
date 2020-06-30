@@ -78,3 +78,11 @@ repetindo o próprio elemento e o atributo th:text imprime texto na página.
 
 
 [ATIVIDADE 3]
+
+Resumo da aula 2: foram criados os arquivos estáticos (html) no package Template, envolvendo a incrementação da index.html e a criação da página 
+listaconvidados.html. Também foi adicionado o Bootstrap no projeto e incrementado seu uso nas páginas estáticas. Foi configurado o acesso ao Banco de Dados
+através de um datasource na classe Configuração e adicionada a dependência do starter do Spring Data no pom.xml, o qual disponibiliza muitas configurações padrão,
+como a utilizada na Interface ConvidadoRepository, que estendeu de CrudRepository e foi utilizada para capturar como lista os dados do banco e transformar
+em uma listaConvidados para dispor dos dados na tela de listaconvidados, utilizando o model do SpringMVC.
+Foi utilizado o thymeleaf na página estática da listaconvidados para percorrer a lista de convidados e mostrar as informações da mesma na tela, criando
+uma linha para cada objeto.
