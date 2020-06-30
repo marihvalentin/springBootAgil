@@ -79,10 +79,31 @@ repetindo o próprio elemento e o atributo th:text imprime texto na página.
 
 [ATIVIDADE 3]
 
-Resumo da aula 2: foram criados os arquivos estáticos (html) no package Template, envolvendo a incrementação da index.html e a criação da página 
+****Resumo da aula 2: foram criados os arquivos estáticos (html) no package Template, envolvendo a incrementação da index.html e a criação da página 
 listaconvidados.html. Também foi adicionado o Bootstrap no projeto e incrementado seu uso nas páginas estáticas. Foi configurado o acesso ao Banco de Dados
 através de um datasource na classe Configuração e adicionada a dependência do starter do Spring Data no pom.xml, o qual disponibiliza muitas configurações padrão,
 como a utilizada na Interface ConvidadoRepository, que estendeu de CrudRepository e foi utilizada para capturar como lista os dados do banco e transformar
 em uma listaConvidados para dispor dos dados na tela de listaconvidados, utilizando o model do SpringMVC.
 Foi utilizado o thymeleaf na página estática da listaconvidados para percorrer a lista de convidados e mostrar as informações da mesma na tela, criando
-uma linha para cada objeto.
+uma linha para cada objeto.****
+
+[ATIVIDADE 4]
+
+- Durante nosso curso, vamos usar o MySQL como nosso banco de dados. É o banco de dados que o cliente já utiliza na aplicação dele, mas caso eu queira 
+mudar para PostgreSQL, o que eu iria precisar mudar?
+- Como estamos usando o start Spring-data-jpa, a alteração no pom.xml seria a inclusão do driver de conexão com o PostgreSQL
+
+<dependency>
+    <groupId>postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>9.1-901-1.jdbc4</version>
+</dependency>
+
+- E também alterar as propriedades de acesso ao banco de dados, por exemplo:
+
+dataSource.setDriverClassName("org.postgresql.Driver");
+dataSource.setUrl("jdbc:postgresql://localhost:5432/listavip");
+dataSource.setUsername("root");
+dataSource.setPassword("root");
+
+
