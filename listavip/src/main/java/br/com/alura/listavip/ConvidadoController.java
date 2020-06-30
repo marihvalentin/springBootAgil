@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ConvidadoController
@@ -31,9 +32,16 @@ public class ConvidadoController
     }
 
     @RequestMapping(value = "salvar", method = RequestMethod.POST)
-    public void salvar()
+    public String salvar(@RequestParam("nome")String nome, @RequestParam("email") String email,
+                         @RequestParam("telefone") String telefone)
     {
+        //variável da entidade do Convidado através dos parametros declarados acima
+        Convidado novoConvidado = new Convidado(nome, email, telefone);
 
+        //comando que salva e envia os dados preenchidos do novo convidado para o banco de dados
+        repository.save(novoConvidado);
+
+        return "listaconvidados";
     }
 }
 
