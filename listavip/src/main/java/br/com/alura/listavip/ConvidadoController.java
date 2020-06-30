@@ -32,14 +32,18 @@ public class ConvidadoController
     }
 
     @RequestMapping(value = "salvar", method = RequestMethod.POST)
-    public String salvar(@RequestParam("nome")String nome, @RequestParam("email") String email,
-                         @RequestParam("telefone") String telefone)
+    public String salvar(@RequestParam("nome") String nome, @RequestParam("email") String email,
+                         @RequestParam("telefone") String telefone, Model model)
     {
         //variável da entidade do Convidado através dos parametros declarados acima
         Convidado novoConvidado = new Convidado(nome, email, telefone);
 
         //comando que salva e envia os dados preenchidos do novo convidado para o banco de dados
         repository.save(novoConvidado);
+
+        Iterable<Convidado> convidados = repository.findAll();
+
+        model.addAttribute("convidados", convidados);
 
         return "listaconvidados";
     }
