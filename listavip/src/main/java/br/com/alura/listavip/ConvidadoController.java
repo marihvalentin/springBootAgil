@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class ConvidadoController
@@ -27,6 +28,12 @@ public class ConvidadoController
         model.addAttribute("convidados", convidados);
 
         return "listaconvidados";
+    }
+
+    @RequestMapping(value = "salvar", method = RequestMethod.POST)
+    public void salvar()
+    {
+
     }
 }
 
