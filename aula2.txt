@@ -1,0 +1,80 @@
+>>> AULA 2 <<<
+[ATIVIDADE 1]
+Vamos remover o código presente na classe de configuração que trata a requisição para uma outra classe de controller. 
+Criaremos uma classe chamada ConvidadoController e nesta criaremos um método chamado index que mapeará a requisição em / e retornará como String o nome do 
+template que criamos, o index.html.
+- Note que retornamos apenas o nome do template, sem a extensão do arquivo. Isto por que o engine de template fará as associações. 
+
+***Observações: Muito do que vimos até agora, está dentro de um conceito muito comum presente nos frameworks mais modernos que é a Convenção sobre a Configuração. 
+Antes precisaríamos configurar uma série de recursos para ter a aplicação funcionando. Agora apenas seguindo algumas convenções, pulamos todas as configurações 
+e apenas focamos no que é importante.
+Das convenções que vimos até aqui temos: Os templates das páginas são guardados na pasta templates dentro de resources e também a convenção de 
+onde armazenar os arquivos estáticos (css, js, imagens, etc.) que ficam dentro da pasta static.***
+
+[ATIVIDADE 2]
+- Começaremos criando uma página simples de teste, a fim de verificar que tudo está funcionando normalmente. Criaremos mais um arquivo na pasta de templates 
+chamada listaconvidados.html.
+E por último, precisamos mapear a rota /listaconvidados para este template. Na classe ConvidadoController então, criaremos um novo método chamado 
+listaConvidados que apenas retorna o nome do template da seguinte forma:
+
+@RequestMapping("listaconvidados")
+public String listaConvidados(){
+    return "listaconvidados";
+
+- Mas se lembrarmos bem, a lista de convidados está salva no banco de dados e não temos acesso ao banco de dados ainda. Para a configuração do banco de dados, 
+vamos utilizar mais um starter, esta chamado de Spring Boot Data JPA Starter, que configura todas as dependências com Hibernate e JPA. 
+Antes precisávamos configurar tudo isso via XML, mas não precisamos mais disso. Adicionaremos as seguinte dependências ao pom.xml
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+    <version>1.4.2.RELEASE</version>
+</dependency>
+
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.40</version>
+</dependency>
+
+
+- Agora precisamos configurar o acesso ao banco de dados, ou seja, definir o caminho para o banco, o usuário e a senha.
+Na classe Configuracao.java, adicionaremos um novo método responsável por criar o DataSource de conexão ao banco, o anotaremos com @Bean 
+para que este possa ser gerenciado pelo Spring. As informações de url, username e password devem estar de acordo com as configurações locais.
+
+-Já temos a página de apresentação dos convidados, temos o controller que exibe esta página, mas não temos uma entidade que representa os convidados 
+na nossa aplicação. Para isto criaremos uma nova classe chamada Convidado que terá os atributos, id, nome, email e telefone.
+
+- Neste ponto, precisamos fazer com que o controller de convidados possa resgatar os registros no banco de dados e então deixa-los disponíveis para o 
+página exibir. O Spring Boot tem disponível um CRUD genérico que permite que façamos isso de forma bem simples.
+
+- Primeiro precisaremos criar uma interface que extenda a CRUDRepository do Spring e então, usar esta interface para acessar o banco de dados. 
+A interface já herdará todos os método necessários, precisando apenas, indicar para ela qual é a entidade e qual é o identificador único de cada registro. 
+A interface apenas tem os indicadores que quais classes são a entidade e o identificador único, que neste caso são: A classe Convidado e o atributo do tipo Long.
+
+- Para utilizá-la precisaremos apenas de um atributo do tipo desta interface anotado com @Autowired para que o Spring disponibilize um objeto com 
+as características de um repository capaz de retornar objetos de Convidado. 
+
+- O passo a seguir é capturar todos os registros presentes no banco de dados usando o objeto repository e deixamos disponível para a página por meio 
+de um outro objeto, chamado Model, que será recebido como parâmetro no método listaConvidados da classe ConvidadoController.
+
+- O model será disponibilizado para a view (página) pelo Spring. O método usará o findAll do repository para retornar todos os registro em um Iterable por o
+nde podemos iterar. Adicionamos os convidados como atributo de model e retornamos o nome do template.
+
+- Teremos que utilizar um outro starter do Spring Boot para que nossos templates possam capturar os objetos que estamos enviando para estes e 
+fazer com que a página fique dinâmica. É aqui que começamos a usar o Thymeleaf. No pom.xml teremos mais uma dependência.
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    <version>1.4.2.RELEASE</version>
+</dependency>
+
+- Para utilizar o thymeleaf em nossos templates precisamos apenas criar o template, que chamaremos de listaconvidados.html e no atributo html do 
+template adicionaremos o atributo xmlns:th="http://www.thymeleaf.org". Desta forma, o template engine sabe que o template atual deve ser processado. 
+
+- Não precisamos ficar usando tags específicas, apenas atributos nos elementos do HTML. O atributo th:each percorre uma lista de itens iteráveis, 
+repetindo o próprio elemento e o atributo th:text imprime texto na página.
+
+
+[ATIVIDADE 3]
