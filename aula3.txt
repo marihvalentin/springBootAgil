@@ -1,0 +1,30 @@
+>>> AULA 3 <<<
+
+[ATIVIDADE 1]
+
+- Devemos realizar uma alteração no formulário de cadastro de novo convidado para fazer com que o formulário submeta as informações via POST e a action será "salvar" 
+ao invés de "convidado". 
+
+- O controller é quem recebe as informações enviadas pela view. Criaremos então o método salvar que recebe estas informações via POST.  Vamos receber todos 
+os dados vindos do formulário, criar um objeto convidado, salvá-lo com o objeto repository e retornar o template de listagem dos convidados.
+
+@RequestMapping(value= "salvar", method = RequestMethod.POST)
+public String salvar(@RequestParam("nome") String nome, @RequestParam("email") String email, 
+                   @RequestParam("telefone") String telefone ){
+
+    Convidado novoConvidado = new Convidado(nome, email, telefone);
+    repository.save(novoConvidado);
+
+    return "listaconvidados";
+}
+
+
+- O primeiro problema deste código é: Não temos um construtor na classe Convidado e por isso teremos erros. Para evita-los, criaremos dois construtores, 
+um vazio, padrão e outro aceitando estes valores.
+
+- Vamos fazer com que o método salvar receba o model e carregue os convidados para a página novamente. Assim, ao salvar um convidado, a lista 
+será recarregada mostrando o novo convidado na lista.
+
+****na classe Convidado, a anotação @GeneratedValue relacionada ao id foi atualizada para "@GeneratedValue(strategy = GenerationType.IDENTITY)", 
+utilizado para que o Hibernate gere o id auto-increment, resolvendo assim erros de cadastro e reforçando a compatibilidade do atributo com 
+o campo no banco de dados.****
