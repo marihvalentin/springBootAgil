@@ -17,6 +17,20 @@ public class Convidado
 
     private String telefone;
 
+    public Convidado()
+    {
+        //construtor padrão
+    }
+
+    //construtor para cadastro de novos convidados (criar objeto no convidado controller)
+    public Convidado(String nome, String email, String telefone)
+    {
+        super();
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+    }
+
     public Long getId() {
         return id;
     }
