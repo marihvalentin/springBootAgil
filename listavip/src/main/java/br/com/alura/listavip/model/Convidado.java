@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Convidado
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //hibernate gera id auto-increment 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //hibernate gera id auto-increment
     private Long id;
 
     private String nome;
