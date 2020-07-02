@@ -28,3 +28,63 @@ será recarregada mostrando o novo convidado na lista.
 ****na classe Convidado, a anotação @GeneratedValue relacionada ao id foi atualizada para "@GeneratedValue(strategy = GenerationType.IDENTITY)", 
 utilizado para que o Hibernate gere o id auto-increment, resolvendo assim erros de cadastro e reforçando a compatibilidade do atributo com 
 o campo no banco de dados.****
+
+[ATIVIDADE 2]
+
+Adicionada dependência de devtools do spring boot no pom.xml que identifica quando o código sofreu alterações e reinicia o servidor automaticamente.
+
+[RESUMO]
+
+Nesta aula, aprendemos a utilizar nosso CRUD genérico para salvar convidados em nossa lista. Vimos como utilizar algumas outras ferramentas para otimizar 
+algumas atividades repetitivas que consomem um tempo considerável durante o desenvolvimento da aplicação.
+
+Estas ferramentas foram o Spring Devtools, que reinicia o servidor rapidamente a cada alteração na aplicação e o plugin LiveReload, que atualiza 
+as páginas no navegador quando o servidor as altera.
+
+[ATIVIDADE 4 - CRUD REPOSITORY]
+
+- Durante essa aula, foi necessário salvar o convidado que veio do formulário. Para salvar tal objeto, usamos o método save que herdamos da 
+Interface CrudRepository. Caso eu precise deletar o objeto no banco ao invés de salvar, levando em conta que nós já temos o objeto Convidado populado. 
+Como faria isso?
+
+- Para fazer tal operação, podemos usar também a Interface CrudRepository, porém o método que temos que usar é o delete:
+
+
+Convidado convidado = repository.find(idConvidado);
+repository.delete(convidado);
+
+
+- Lembre-se que essa interface tem todos os métodos para as operações de CRUD. Caso queria conhecer mais, basta acessar a documentação:
+
+http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html
+
+
+[ATIVIDADE 5 - EXPANDINDO O CRUD BÁSICO]
+
+
+- Vimos que com a ajuda da interface CrudRepository temos os métodos padrões de um CRUD, mas não só de CRUD que uma aplicação vive. 
+Como eu conseguiria criar um método para procurar o convidado pelo nome, por exemplo?
+
+- Uma boa alternativa é já usar essa nossa interface e criar um método nela para fazer tal pesquisa
+
+
+public interface ConvidadoRepository extends CrudRepository<Convidado, Long> {
+    List<Convidado> findByNome(String nome);
+}
+
+
+- Agora é só usa-la onde você desejar, basta ter uma váriavel dessa interface
+
+
+@Autowired
+private ConvidadoRepository convidadoRepository;
+
+
+public void obterConvidadoPor(String nome){
+
+    convidadoRepository.findByNome(nome);
+}
+
+
+- Claro que você pode criar sua implentação tradicional, mas por que não usar o Spring Data já que temos ele pronto, não é mesmo.
+
