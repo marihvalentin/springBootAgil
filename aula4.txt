@@ -1,0 +1,126 @@
+>>> AULA 4 - Criando uma lib standalone com o Spring Boot <<<
+
+[ATIVIDADE 1 - Criando aplicação com o Spring Initializr]
+
+ - Em nossa aplicação está faltando uma regra de negócio importante que havia na aplicação antiga: O envio de emails. Os convidados ao serem adicionados à 
+lista VIP devem ser notificados via email, indicando que estes foram convidados. Nosso cliente, aproveitando do momento de modernização da aplicação nos 
+solicitou que o envio de emails fosse realizado em um serviço diferente, para que este pudesse ser reaproveitado em outros de seus projetos. Resolveremos 
+este problema criando uma outra aplicação que será responsável apenas pelo envio de emails. Poderíamos iniciar este projeto manualmente, mas por questões 
+de praticidade, utilizaremos o Spring Initializr, disponível em start.spring.io.
+
+ - Precisamos também adicionar uma nova dependência em nosso projeto. Esta se trata de uma biblioteca que fará o envio dos emails. Usaremos então 
+a Apache Commons Email. No pom.xml, adicionaremos:
+
+
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-email</artifactId>
+    <version>1.4</version>
+</dependency>
+
+
+ - O próximo passo é criar a classe responsável por enviar os emails e configura-la como um serviço. Chamaremos esta de EmailService, ela será anotada 
+com @Service e terá um método enviar que não terá retorno e receberá como parâmetro o nome e o email do convidado.
+
+ - Precisamos apenas copiar o bloco try/catch alterando os lugares onde se usa o objeto convidado para utilizar o nome e o email recebidos por parâmetro.
+
+
+@Service
+public class EmailService {
+    public void enviar(String nome, String emailConvidado){
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("email", "password"));
+            email.setSSLOnConnect(true);
+
+            email.setFrom("email");
+            email.setSubject("Você foi convidado pelo ListaVIP");
+            email.setMsg("Olá " + nome + ". Você acaba de ser convidado pelo ListaVIP.");
+            email.addTo(emailConvidado);
+            email.send();
+
+        } catch (EmailException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+ - Agora precisamos gerar o artefato deste projeto com o Maven para que possamos utilizar a biblioteca nos outros projetos, como o Lista VIPs inclusive. 
+Com a ajuda do terminal, vá até a pasta do projeto enviadorEmail e use o comando mvn install. Após o comando, algumas tarefas serão realizadas 
+pelo Maven e o .jar do projeto enviadorEmail estará disponível na pasta target do projeto.
+
+
+[ATIVIDADE 2 - Integrando nossa nova lib com a aplicação principal]
+
+ - Agora que temos nossa biblioteca de envio de e-mail pronta, precisamos integrar a mesma com a aplicação Lista VIP. Fazemos isso adicionando-a como uma 
+dependência do projeto no pom.xml.
+
+
+<dependency>
+    <groupId>br.com.alura.enviadorEmail</groupId>
+    <artifactId>enviadorEmail</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+</dependency>
+
+ - Com isto teremos a biblioteca disponível e podemos enviar e-mails instanciando um objeto da classe EmailService e utilizando o método enviar. 
+No método salvar da classe ConvidadoController após salvar o convidado no banco de dados, enviaremos o e-mail.
+
+
+@RequestMapping(value= "salvar", method = RequestMethod.POST)
+public String salvar(@RequestParam("nome") String nome, @RequestParam("email") String email,
+                   @RequestParam("telefone") String telefone, Model model ){
+
+    Convidado novoConvidado = new Convidado(nome, email, telefone);
+    repository.save(novoConvidado);
+
+    new EmailService().enviar(nome, email);
+
+    Iterable<Convidado> convidados = repository.findAll();
+    model.addAttribute("convidados", convidados);
+
+    return "listaconvidados";
+}
+
+
+ - Desta forma, caso tenha configurado um servidor de email corretamente. Verifique, o e-mail deve ter sido enviado com sucesso.
+
+*****Uma camada de serviço: Convidado*****
+
+ - Por questões de boas práticas faremos uma pequena refatoração em nosso projeto. Observe que o controller de convidados está acessando diretamente o 
+repositório de convidados, o que de certa forma pode não parecer problemático, mas não está dentro dos padrões de projetos adequados. A solução adequada 
+é que para obter e salvar convidados em nossa aplicação, não é acessar a base de dados diretamente do controller, mas sim por meio de um serviço. 
+Criaremos então uma nova classe chamada ConvidadoService, no pacote br.com.alura.service e anotaremos esta classe com @Service. Após isso, moveremos o 
+código que recupera todos os convidados que está na classe ConvidadoController para um método que chamaremos de obterTodos nesta nova classe. Faremos 
+o mesmo com a lógica de salvar o convidado.
+
+ - Lembre-se de que agora é a classe ConvidadoService que acessa o repositório. Por isso precisamos do objeto ConvidadoRepository. E lembre-se 
+também de atualizar a classe ConvidadoController para refletir estas mudanças.
+
+
+RESUMO:
+
+> Criamos um projeto/aplicação com a ferramenta web Spring Initializr, o "enviadorEmail", que permite a configuração de vários itens no projeto maven
+com Spring Boot (como dependências, por exemplo)
+> o "enviadorEmail" tem a sua classe de configuração e classe de serviço onde foi feita a implementação para envio do e-mail, passando no método o nome e 
+emailDestinatário, os dados de conexão com o servidor de email, email remetente e a própria mensagem
+> Usamos o enviadorEmail como dependência no ListaVip, adicionando no pom.xml do projeto e foi utilizado dentro da Controller o comando para o envio de e-mails
+ao cadastrar um novo convidado
+> Fizemos uma refatoração no projeto criando a camada de serviço (package service) com a classe ConvidadoService, para fins de organização pelas boas práticas.
+
+
+[ATIVIDADE 6 - Empacotamento]
+
+
+ - Após finalizar nossa aplicação, geramos um artefato. Esse artefato é um JAR, mas se a gente quiser gerar um WAR ao inves do JAR. Como a gente faria isso?
+Como estamos usando o Maven para geração de artefatos da nossa aplicação, a configuração de qual tipo ele vai gerar fica no pom.xml. 
+Dentro do arquivo tem a tag <packaging>.
+
+ - Então basta trocar o valor dela para war e rodar o comando:
+
+mvn package
+
+
