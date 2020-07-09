@@ -1,0 +1,48 @@
+>>>>AULA 5: Configurando nosso container e gerando nosso FatJar<<<<
+
+[ATIVDADE 1 -  Mudando nosso container web]
+
+ - O Spring Boot por padrão, trás o Tomcat pré-configurado para o projeto. Felizmente a troca é muito simples e a próprio documentação é clara sobre 
+como fazer isso. Precisamos simplesmente adicionar uma exclusão na dependência do starter web, sendo esta, o starter do Tomcat e adicionar uma nova 
+dependência, neste caso, do starter do Jetty. Assim teremos:
+
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <version>1.4.2.RELEASE</version>
+
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+    </exclusions>
+
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+    <version>1.4.2.RELEASE</version>
+</dependency>
+
+
+**documentação: https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html#howto-use-jetty-instead-of-tomcat
+
+[ATIVIDADE 2 - Agrupando configurações no application properties]
+
+ - Precisamos que a aplicação seja acessada pela porta 9000 do servidor, e não pela 8080 padrão do Jetty ou Tomcat. E agora? O Spring mais uma vez nos 
+fornece estas e outras configurações de forma simplificada e prática de realizar. Muitas destas configurações que são tidas como propriedades da 
+aplicação podem ser configuradas em um arquivo chamado application.properties ou application.yml que deve estar dentro da pasta resources. Uma lista 
+de configurações pode ser encontrada no apêndice da documentação. A que nos interessa no momento é a server.port, onde podemos definir que a porta de 
+acesso para a aplicação agora será a 9000.
+
+ - Além de configurarmos a porta padrão do servidor de aplicação, vamos aproveitar para mover as configurações de banco de dados para o arquivo 
+properties também. Assim teremos todas as configurações centralizadas neste mesmo arquivo. 
+
+>> Documentaçao das Configurações do Spring Boot: http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#common-application-properties
+
+
+[ATIVIDADE 3 -  Gerando nosso fatjar]
+
