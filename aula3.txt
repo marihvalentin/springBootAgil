@@ -1,6 +1,6 @@
->>> AULA 3 <<<
+>>> AULA 3: Produtividade com ajuda do Spring Devtools <<<
 
-[ATIVIDADE 1]
+[ATIVIDADE 1 - Usando nosso CRUD genérico para salvar]
 
 - Devemos realizar uma alteração no formulário de cadastro de novo convidado para fazer com que o formulário submeta as informações via POST e a action será "salvar" 
 ao invés de "convidado". 
@@ -29,11 +29,11 @@ será recarregada mostrando o novo convidado na lista.
 utilizado para que o Hibernate gere o id auto-increment, resolvendo assim erros de cadastro e reforçando a compatibilidade do atributo com 
 o campo no banco de dados.****
 
-[ATIVIDADE 2]
+[ATIVIDADE 2 - Velocidade no desenvolvimento com Spring Devtools]
 
 Adicionada dependência de devtools do spring boot no pom.xml que identifica quando o código sofreu alterações e reinicia o servidor automaticamente.
 
-[RESUMO]
+[ATIVIDADE 3 - RESUMO]
 
 Nesta aula, aprendemos a utilizar nosso CRUD genérico para salvar convidados em nossa lista. Vimos como utilizar algumas outras ferramentas para otimizar 
 algumas atividades repetitivas que consomem um tempo considerável durante o desenvolvimento da aplicação.

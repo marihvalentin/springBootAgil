@@ -1,6 +1,7 @@
->>> AULA 1  <<<
+>>> AULA 1:  Criando nossa primeira aplicação com o Spring Boot <<<
 
-[ATIVIDADE 3]
+[ATIVIDADE 3 - Subindo nossa aplicação web]
+
 Criaremos então a classe Configuracao que irá configurar o Spring em nosso projeto. 
 Esta será criada dentro do pacote br.com.alura.listavip.
 - A anotação @SpringBootApplication, ela é a responsável por configurar nossa aplicação Spring.
@@ -8,8 +9,12 @@ Esta será criada dentro do pacote br.com.alura.listavip.
 nossa aplicação e a deixe disponível para podermos acessá-la, que receberá o nome de SpringApplication. 
 - Para exibirmos uma mensagem mais interessante na execução (localhost:8080), transformaremos nossa classe 
 de configuração em um Controller, e mapearemos o endereço / para um método que retornará uma String com uma mensagem de olá.
-[ATIVIDADE 5]
+
+[ATIVIDADE 5 - Container padrão]
+
 - O SpringBoot provê um container padrão quando trabalhamos com starter web. Esse container default é o APACHE TOMCAT.
-[ATIVIDADE 9]
+
+[ATIVIDADE 9 - @RequestMapping]
+
 - A principal funcionalidade da anotação @RequestMapping é mapear uma rota para acessar algum recurso no nosso backend ou seja, 
 com essa anotação podemos anotar uma classe ou um método para transformar esse recurso em um rota acessível dentro da nossa aplicação.
