@@ -46,3 +46,93 @@ properties também. Assim teremos todas as configurações centralizadas neste mesm
 
 [ATIVIDADE 3 -  Gerando nosso fatjar]
 
+
+ - Com a aplicação finalizada, precisamos envia-la para o cliente. Como iremos fazer isso? Vamos empacotar toda a aplicação em um único JAR e envia-la.
+Semelhante ao que fizemos com a aplicação enviadorEmail, iremos ao diretório da aplicação Lista VIPs e usaremos o comando mvn package. Assim o Maven fará 
+o empacotamento da aplicação e a deixará disponível na pasta target do projeto.
+
+ - Após o empacotamento, devemos testar a aplicação a fim de verificar que está tudo funcionando perfeitamente. Usando para isto o comando java -jar passando 
+para o comando o arquivo gerado pelo Maven. Por exemplo:
+
+java -jar target/listavip-1.0-SNAPSHOT.jar
+
+
+ - Mas por algum motivo, recebemos um erro:
+
+no main manifest attribute, in target/listavip-1.0-SNAPSHOT.jar
+
+
+- O que acontece é que não instruímos ao Maven como o empacotamento da aplicação deve ser feito. Também não iremos fazer isso manualmente. Iremos utilizar 
+um plugin do Spring Boot para isto. A documentação do Spring Boot além de explicar como gerar o pacote com nossa aplicação, disponibiliza o plugin e a regra 
+de como o build será realizado. O Maven executará a seguinte regra ao empacotar a aplicação - Insira esta regra no pom.xml.
+
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>1.4.2.RELEASE</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>repackage</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+
+
+ - Para garantir que o novo pacote seja gerado sem correr o risco de ainda utilizar coisas do pacote gerado anteriormente, utilizaremos o comando mvn clean. 
+Assim o Maven fará uma limpeza na pasta target. Após isso basta executar o comando mvn package novamente. Agora, é possível executar o comando e a aplicação
+iniciará sem problemas.
+
+[ATIVIDADE 4 - Pós implatação com Spring actuator]
+
+ - Um projeto interessante que também é um starter do Spring é o Spring Actuator que fornece vários endpoints onde podemos verificar algumas informações 
+em tempo de execução da aplicação. Para utiliza-lo primeiro temos que o adicionar no pom.xml
+
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+    <version>1.4.2.RELEASE</version>
+</dependency>
+
+
+ - Os endpoints podem ser vistos na própria documentação do Spring Actuator: 
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
+
+ - Tenha em mente que, o Spring Actuator é um RESTful Web Service. Isso quer dizer que todos os dados disponíveis por ele, estarão em formato de texto, 
+que por padrão é JSON. 
+
+ - No Spring Boot 2, a forma de acesso é diferente da exemplificada em aula. Agora é feita da seguinte maneira: http://{host}:{port}/actuator
+Nessa URL são mostradas as métricas disponíveis, porém nem todas são mostradas por padrão por conta de segurança. Pra mostrar mais é preciso configurar no 
+application.properties. No exemplo abaixo, há o comando para mostrar todas e excluir o Beans: 
+
+
+management.endpoints.web.exposure.include=*
+
+management.endpoints.web.exposure.exclude=beans
+
+ - O Spring Boot 2 traz várias mudanças, inclusive para o Actuator. As mudanças mais significativas incluem:
+
+    *Suporte à Jersey RESTful web services;
+    *Suporte a apps reativas web para o WebFlux;
+    *Novo mapeamento de endpoint;
+    *Criação simplificada de endpoints definidos por usuário;
+    *Endpoint de segurança aperfeiçoado.
+
+
+[AULA 5 - RESUMO]
+
+- Foi realizada a troca de servidor do tomcat padrão para o Jetty, descobrimos como excluir um padrão de um starter e personalizar no spring boot (dentro das
+dependências do pom.xml), criamos o application.properties para adicionar propriedades da aplicação, como a modificação de porta que foi realizada e a transferência
+dos dados de conexão com banco de dados; também geramos o artefato final do projeto, o arquivo .jar e através do plugin inserido no pom.xml, o maven gera um
+arquivo executável. Por fim foi adicionada a dependência do Spring Actuator para acompanhamento de dados pós produção.
+
+
+
+
