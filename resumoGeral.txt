@@ -1,0 +1,13 @@
+ - Iniciamos o curso migrando a aplicação de Lista VIPs, primeiramente com o starter Web criando controllers e iniciando a aplicação. Vimos como disponibilizar 
+arquivos estáticos para os templates e também estudamos um outro starter neste ponto o Thymeleaf.
+
+ - Aprendemos como acessar o banco de dados com o starter Data JPA e obtivemos o CRUD genérico por meio da interface CrudRepository onde posteriormente fizemos 
+uma refatoração, criando um serviço de acesso a dados.
+
+ - Criamos também um outro projeto responsável pelo envio de emails da aplicação principal e adicionamos o jar desta outra aplicação como dependência do Lista VIPs.
+
+ - Também aprendemos como personalizar um starter, removendo algum sub-starter especifico e adicionando outro, como no caso da troca do Tomcat pelo Jetty e 
+vimos como agrupar todas as configurações em um único arquivo .properties.
+
+ - Por último, vimos como empacotar a aplicação da forma correta usando o Maven em conjunto com o plugin de build e como utilizar o Spring Actuator para monitorar 
+a aplicação em produção por meio de endpoints RESTful.
